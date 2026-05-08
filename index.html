@@ -6,17 +6,10 @@
 <title>🐾 小狗必吃榜</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --brand:#FF6B35;--brand-dark:#E8521E;
-  --bg:#F7F5F2;--card:#fff;--border:#eee;--text:#1a1a1a;--muted:#888;
-}
+:root{--brand:#FF6B35;--brand-dark:#E8521E;--bg:#F7F5F2;--card:#fff;--border:#eee;--text:#1a1a1a;--muted:#888;}
 body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;background:var(--bg);color:var(--text);}
 .app{max-width:390px;margin:0 auto;background:var(--bg);min-height:100vh;}
-
-/* 隐藏编辑入口 - 右下角小按钮 */
 .secret-btn{position:fixed;bottom:80px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.12);border:none;cursor:pointer;font-size:16px;z-index:50;color:#fff;display:flex;align-items:center;justify-content:center;}
-
-/* 密码弹窗 */
 .pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:400;align-items:center;justify-content:center;}
 .pw-overlay.show{display:flex;}
 .pw-card{background:#fff;border-radius:20px;padding:28px 24px;width:280px;text-align:center;}
@@ -26,16 +19,15 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
 .pw-input:focus{outline:none;border-color:var(--brand);}
 .pw-btn{width:100%;background:var(--brand);color:#fff;border:none;border-radius:28px;padding:12px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;}
 .pw-err{font-size:12px;color:#e74c3c;margin-top:8px;display:none;}
-
-/* Header */
-.header{background:var(--card);padding:12px 16px 0;border-bottom:1px solid var(--border);}
+.header{background:var(--card);padding:12px 16px 0;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .shop-name{font-size:17px;font-weight:700;}
 .shop-tag{background:var(--brand);color:#fff;font-size:11px;padding:2px 8px;border-radius:20px;margin-left:8px;}
 .tabs{display:flex;}
-.tab{padding:8px 16px;font-size:14px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;}
+.tab{padding:8px 16px;font-size:14px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}
 .tab.active{color:var(--brand);border-bottom-color:var(--brand);font-weight:500;}
-.body{display:flex;height:calc(100vh - 130px);}
+.page{display:none;}.page.active{display:block;}
+.order-body{display:flex;height:calc(100vh - 130px);}
 .sidebar{width:82px;background:var(--bg);overflow-y:auto;flex-shrink:0;}
 .cat-item{padding:13px 6px;text-align:center;font-size:12px;color:var(--muted);cursor:pointer;border-left:3px solid transparent;line-height:1.4;}
 .cat-item.active{background:var(--card);color:var(--brand);border-left-color:var(--brand);font-weight:500;}
@@ -60,6 +52,17 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
 .btn-add:active{transform:scale(0.88);}
 .btn-minus{background:#fff;color:var(--brand);border:1.5px solid var(--brand);}
 .cart-qty{font-size:15px;font-weight:600;min-width:20px;text-align:center;}
+.topping-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center;}
+.topping-overlay.show{display:flex;}
+.topping-sheet{background:var(--card);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:390px;animation:slideUp 0.3s ease;}
+.topping-title{font-size:16px;font-weight:700;margin-bottom:4px;}
+.topping-sub{font-size:12px;color:var(--muted);margin-bottom:14px;}
+.topping-group{margin-bottom:14px;}
+.topping-group-title{font-size:13px;font-weight:600;margin-bottom:8px;}
+.topping-options{display:flex;flex-wrap:wrap;gap:8px;}
+.topping-opt{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:13px;cursor:pointer;background:#fff;color:var(--text);font-family:inherit;transition:all 0.15s;}
+.topping-opt.selected{border-color:var(--brand);background:var(--brand);color:#fff;}
+.topping-confirm{width:100%;background:var(--brand);color:#fff;border:none;border-radius:28px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;}
 .cart-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:390px;background:#1a1a1a;color:#fff;display:flex;align-items:center;padding:12px 16px;gap:12px;z-index:100;}
 .cart-icon-wrap{position:relative;}
 .cart-icon{font-size:26px;}
@@ -75,6 +78,7 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
 .sheet-title{font-size:17px;font-weight:700;margin-bottom:16px;text-align:center;}
 .order-list{max-height:200px;overflow-y:auto;margin-bottom:14px;}
 .order-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5f5f5;font-size:14px;}
+.order-row-sub{font-size:11px;color:var(--muted);padding:2px 0 6px;}
 .confirm-btn{width:100%;background:var(--brand);color:#fff;border:none;border-radius:28px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;}
 .note-input{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px;font-size:14px;font-family:inherit;resize:none;margin-bottom:12px;color:var(--text);}
 .success-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300;align-items:center;justify-content:center;}
@@ -85,16 +89,46 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
 .success-title{font-size:20px;font-weight:700;margin-bottom:8px;}
 .success-sub{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;}
 .success-close{background:var(--brand);color:#fff;border:none;border-radius:28px;padding:12px 32px;font-size:15px;cursor:pointer;font-family:inherit;}
-
-/* Editor */
+/* 评价 */
+.review-page{padding:12px;padding-bottom:20px;}
+.review-item{background:var(--card);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;}
+.review-emoji{font-size:32px;width:48px;height:48px;background:#f0ebe3;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.review-info{flex:1;}
+.review-name{font-size:14px;font-weight:600;margin-bottom:6px;}
+.stars{display:flex;gap:4px;}
+.star{font-size:22px;cursor:pointer;transition:transform 0.1s;color:#ddd;}
+.star.filled{color:#F5A623;}
+.star:active{transform:scale(1.3);}
+.review-count{font-size:11px;color:var(--muted);margin-top:4px;}
+/* 商家 */
+.merchant-page{padding:16px;padding-bottom:40px;overflow-y:auto;height:calc(100vh - 100px);}
+.merchant-hero{background:linear-gradient(135deg,#FF6B35,#FF9A6C);border-radius:16px;padding:24px;text-align:center;margin-bottom:16px;color:#fff;}
+.merchant-logo{font-size:48px;margin-bottom:8px;}
+.merchant-name-big{font-size:22px;font-weight:700;margin-bottom:4px;}
+.merchant-en{font-size:13px;opacity:0.85;margin-bottom:12px;}
+.merchant-stats{display:flex;justify-content:center;gap:24px;}
+.merchant-stat{text-align:center;}
+.merchant-stat-num{font-size:18px;font-weight:700;}
+.merchant-stat-label{font-size:11px;opacity:0.8;}
+.merchant-bio-card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:12px;}
+.merchant-bio-title{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--muted);}
+.merchant-bio-text{font-size:14px;line-height:1.7;color:var(--text);white-space:pre-wrap;}
+.merchant-info-card{background:var(--card);border-radius:14px;padding:16px;}
+.merchant-info-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5;font-size:14px;}
+.merchant-info-row:last-child{border-bottom:none;}
+.merchant-info-icon{font-size:18px;width:24px;text-align:center;flex-shrink:0;}
+/* 编辑器 */
 .editor{display:none;padding:14px;background:var(--bg);min-height:100vh;padding-bottom:60px;}
 .editor.show{display:block;}
 .ed-section{background:var(--card);border-radius:14px;padding:16px;margin-bottom:14px;}
-.ed-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.ed-title{font-size:15px;font-weight:700;margin-bottom:12px;}
 .ed-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
 .ed-input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;color:var(--text);background:#fff;}
 .ed-input:focus{outline:none;border-color:var(--brand);}
+.ed-textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;color:var(--text);background:#fff;resize:none;}
+.ed-textarea:focus{outline:none;border-color:var(--brand);}
 .ed-label{font-size:12px;color:var(--muted);white-space:nowrap;min-width:52px;}
+.ed-label-top{font-size:12px;color:var(--muted);margin-bottom:5px;}
 .ed-btn{border:none;border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:500;}
 .ed-btn-add{background:var(--brand);color:#fff;}
 .ed-btn-del{background:#fff;color:#e74c3c;border:1px solid #e74c3c;}
@@ -102,9 +136,24 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
 .ed-btn-exit{background:#444;color:#fff;width:100%;padding:11px;border-radius:28px;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;margin-top:8px;}
 .cat-block{background:#fafafa;border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px;}
 .cat-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.dish-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
-.dish-row input{border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:13px;font-family:inherit;color:var(--text);}
-.dish-row input:focus{outline:none;border-color:var(--brand);}
+.dish-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px;}
+.dish-main{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
+.dish-main input{border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:13px;font-family:inherit;color:var(--text);}
+.dish-main input:focus{outline:none;border-color:var(--brand);}
+.topping-group-ed{background:#f8f8f8;border-radius:6px;padding:8px;margin-bottom:6px;}
+.topping-group-ed input{border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit;color:var(--text);width:100%;margin-bottom:4px;}
+.topping-group-ed input:focus{outline:none;border-color:var(--brand);}
+.topping-opts-ed{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;}
+.topping-opt-tag{display:flex;align-items:center;gap:2px;background:#fff;border:1px solid var(--border);border-radius:20px;padding:3px 8px;font-size:11px;}
+.topping-opt-tag button{border:none;background:none;color:#e74c3c;cursor:pointer;font-size:13px;padding:0;line-height:1;}
+.add-opt-row{display:flex;gap:4px;}
+.add-opt-row input{flex:1;border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;font-family:inherit;}
+.add-opt-row input:focus{outline:none;border-color:var(--brand);}
+.add-opt-row button{background:var(--brand);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit;}
+.info-row-ed{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.info-row-ed input{flex:1;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;font-family:inherit;color:var(--text);}
+.info-row-ed input:focus{outline:none;border-color:var(--brand);}
+.info-row-ed .emoji-inp{width:38px;text-align:center;flex:none;padding:7px 4px;}
 .email-hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5;}
 .toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#1a1a1a;color:#fff;padding:10px 22px;border-radius:28px;font-size:14px;z-index:999;display:none;white-space:nowrap;}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#ddd;border-radius:10px}
@@ -112,8 +161,7 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
 </head>
 <body>
 <div id="app">
-
-<!-- 点餐页 -->
+ 
 <div id="customerView" class="app">
   <div class="header">
     <div class="header-top">
@@ -124,21 +172,46 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
       <span style="font-size:22px">🫶</span>
     </div>
     <div class="tabs">
-      <div class="tab active">点菜</div>
-      <div class="tab" style="color:#ccc">评价 ★4.9</div>
-      <div class="tab" style="color:#ccc">商家</div>
+      <div class="tab active" onclick="switchTab('order')">点菜</div>
+      <div class="tab" onclick="switchTab('review')">评价 <span id="reviewAvg">★4.9</span></div>
+      <div class="tab" onclick="switchTab('merchant')">商家</div>
     </div>
   </div>
-  <div class="body">
-    <div class="sidebar" id="sidebar"></div>
-    <div class="menu-list" id="menuList"></div>
+ 
+  <div class="page active" id="page-order">
+    <div class="order-body">
+      <div class="sidebar" id="sidebar"></div>
+      <div class="menu-list" id="menuList"></div>
+    </div>
+  </div>
+ 
+  <div class="page" id="page-review">
+    <div class="review-page" id="reviewPage"></div>
+  </div>
+ 
+  <div class="page" id="page-merchant">
+    <div class="merchant-page">
+      <div class="merchant-hero">
+        <div class="merchant-logo">🐾</div>
+        <div class="merchant-name-big" id="merchantNameBig">小狗必吃榜</div>
+        <div class="merchant-en">Dog Restaurant</div>
+        <div class="merchant-stats">
+          <div class="merchant-stat"><div class="merchant-stat-num" id="merchantAvg">4.9</div><div class="merchant-stat-label">综合评分</div></div>
+          <div class="merchant-stat"><div class="merchant-stat-num" id="merchantDishCount">10</div><div class="merchant-stat-label">菜品数量</div></div>
+          <div class="merchant-stat"><div class="merchant-stat-num">100%</div><div class="merchant-stat-label">好评率</div></div>
+        </div>
+      </div>
+      <div class="merchant-bio-card">
+        <div class="merchant-bio-title">📝 店铺简介</div>
+        <div class="merchant-bio-text" id="bioDisplay">这里是专属于你的小厨房，每一道菜都是用心为你准备的 💝</div>
+      </div>
+      <div class="merchant-info-card" id="merchantInfoCard"></div>
+    </div>
   </div>
 </div>
-
-<!-- 隐藏编辑按钮（连点3次触发） -->
-<button class="secret-btn" id="secretBtn" title="">🐾</button>
-
-<!-- 购物车栏 -->
+ 
+<button class="secret-btn" id="secretBtn">🐾</button>
+ 
 <div class="cart-bar" id="cartBar">
   <div class="cart-icon-wrap">
     <span class="cart-icon">🛒</span>
@@ -150,8 +223,16 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
   </div>
   <button class="submit-btn disabled" id="submitBtn" onclick="openSheet()">提交订单</button>
 </div>
-
-<!-- 确认弹窗 -->
+ 
+<div class="topping-overlay" id="toppingOverlay" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="topping-sheet">
+    <div class="topping-title" id="toppingTitle"></div>
+    <div class="topping-sub" id="toppingSub">请选择配料选项</div>
+    <div id="toppingGroups"></div>
+    <button class="topping-confirm" onclick="confirmTopping()">加入购物车</button>
+  </div>
+</div>
+ 
 <div class="overlay" id="orderSheet" onclick="if(event.target===this)this.classList.remove('show')">
   <div class="sheet">
     <div class="sheet-title">🐾 确认订单</div>
@@ -163,8 +244,7 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
     <button class="confirm-btn" onclick="submitOrder()">🛎️ 呼叫大厨！</button>
   </div>
 </div>
-
-<!-- 成功提示 -->
+ 
 <div class="success-overlay" id="successOverlay">
   <div class="success-card">
     <div class="success-emoji">🐶</div>
@@ -173,31 +253,39 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
     <button class="success-close" onclick="closeSuccess()">好哒 ✨</button>
   </div>
 </div>
-
-<!-- 密码弹窗 -->
+ 
 <div class="pw-overlay" id="pwOverlay">
   <div class="pw-card">
     <div class="pw-title">🔐 大厨专属通道</div>
     <div class="pw-sub">输入密码进入编辑器</div>
-    <input class="pw-input" type="password" id="pwInput" placeholder="••••" maxlength="20"
-      onkeydown="if(event.key==='Enter')checkPw()">
+    <input class="pw-input" type="password" id="pwInput" placeholder="••••" maxlength="20" onkeydown="if(event.key==='Enter')checkPw()">
     <button class="pw-btn" onclick="checkPw()">进入编辑器</button>
     <div class="pw-err" id="pwErr">密码错误，再试试～</div>
     <div style="margin-top:12px">
-      <button onclick="document.getElementById('pwOverlay').classList.remove('show')"
-        style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit">取消</button>
+      <button onclick="document.getElementById('pwOverlay').classList.remove('show')" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit">取消</button>
     </div>
   </div>
 </div>
-
+ 
 <!-- 编辑器 -->
 <div id="editorView" class="editor">
   <div class="ed-section">
     <div class="ed-title">🏪 基本设置</div>
     <div class="ed-row"><span class="ed-label">店铺名</span><input class="ed-input" id="edShopName" value="🐾 小狗必吃榜"></div>
     <div class="ed-row"><span class="ed-label">副标签</span><input class="ed-input" id="edShopTag" value="私厨定制"></div>
-    <div class="ed-row"><span class="ed-label">编辑密码</span><input class="ed-input" id="edPassword" type="password" placeholder="修改编辑器密码"></div>
+    <div class="ed-row"><span class="ed-label">编辑密码</span><input class="ed-input" id="edPassword" type="password" placeholder="留空则不修改"></div>
   </div>
+ 
+  <div class="ed-section">
+    <div class="ed-title">🏪 商家页内容</div>
+    <div class="ed-label-top">店铺简介</div>
+    <textarea class="ed-textarea" id="edBio" rows="4" placeholder="写下你的店铺简介..."></textarea>
+    <div style="margin-top:12px">
+      <div class="ed-label-top">店铺信息（图标 + 文字，共3条）</div>
+      <div id="merchantInfoEditor"></div>
+    </div>
+  </div>
+ 
   <div class="ed-section">
     <div class="ed-title">📧 邮件通知</div>
     <div class="ed-row"><span class="ed-label">Service ID</span><input class="ed-input" id="edServiceId" value="service_co65wh5"></div>
@@ -206,80 +294,120 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
     <div class="ed-row"><span class="ed-label">你的邮箱</span><input class="ed-input" id="edEmail" value="yuan_guohua@163.com"></div>
     <div class="email-hint">💡 女朋友下单后订单详情发到你的163邮箱</div>
   </div>
+ 
   <div class="ed-section">
     <div class="ed-title">🍜 菜品管理</div>
     <div id="catList"></div>
     <button class="ed-btn ed-btn-add" onclick="addCat()" style="width:100%;margin-top:4px">+ 新增分类</button>
   </div>
+ 
   <button class="ed-btn-save" onclick="saveAll()">✅ 保存并应用</button>
   <button class="ed-btn-exit" onclick="exitEditor()">← 退出编辑器</button>
 </div>
-
+ 
 <div class="toast" id="toast"></div>
 </div>
-
+ 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-// ===== 密码（默认1234，可在编辑器里改）=====
-let PASSWORD = '1234';
-
-let MENU = [
-  {cat:"🔥 招牌砂锅粥",items:[
-    {id:1,name:"三拼自由搭配砂锅粥",emoji:"🍲",price:19.9,orig:35.8,monthly:700,tags:"份量十足 · 35人觉得分量足",badges:["hot","rec"]},
-    {id:2,name:"双拼自由搭配砂锅粥",emoji:"🍜",price:19.9,orig:27.8,monthly:400,tags:"实物跟商家描述一致",badges:["hot"]},
-    {id:3,name:"活虾砂锅粥",emoji:"🦐",price:19.9,orig:null,monthly:200,tags:"粥的口感滑嫩",badges:["new","hot"]},
-  ]},
-  {cat:"💕 爱心特供",items:[
-    {id:4,name:"心形煎蛋饭套餐",emoji:"🍳",price:15.9,orig:22,monthly:88,tags:"爱你每一天",badges:["new"]},
-    {id:5,name:"玫瑰花饺子（6只）",emoji:"🌹",price:22,orig:28,monthly:55,tags:"手工花形捏制",badges:["rec"]},
-  ]},
-  {cat:"🥗 营养蔬菜",items:[
-    {id:6,name:"清炒时令蔬菜",emoji:"🥬",price:12,orig:null,monthly:300,tags:"新鲜采购",badges:[]},
-    {id:7,name:"蒜蓉空心菜",emoji:"🌿",price:13,orig:null,monthly:180,tags:"大蒜提香",badges:["rec"]},
-  ]},
-  {cat:"🍹 饮品甜点",items:[
-    {id:8,name:"手打柠檬茶",emoji:"🍋",price:12,orig:16,monthly:220,tags:"现打现喝",badges:["hot"]},
-    {id:9,name:"红豆汤圆",emoji:"🍡",price:8,orig:null,monthly:90,tags:"甜蜜收尾",badges:["new"]},
-    {id:10,name:"草莓雪花冰",emoji:"🍓",price:16,orig:20,monthly:150,tags:"季节限定",badges:["new","rec"]},
-  ]},
+let PASSWORD='1234';
+let SHOP_BIO='这里是专属于你的小厨房，每一道菜都是用心为你准备的 💝';
+let MERCHANT_INFO=[
+  {icon:'📍',text:'专属私厨，送达到家'},
+  {icon:'⏰',text:'营业时间：随时为你开火'},
+  {icon:'🐾',text:'Dog Restaurant · 只为你一人服务'},
 ];
-
-let CONFIG = {
-  shopName:"🐾 小狗必吃榜",shopTag:"私厨定制",
-  serviceId:"service_co65wh5",templateId:"template_aurbnvc",
-  publicKey:"Ky0W9ki3RmCF-N32L",email:"yuan_guohua@163.com"
-};
-
+let CONFIG={serviceId:'service_co65wh5',templateId:'template_aurbnvc',publicKey:'Ky0W9ki3RmCF-N32L',email:'yuan_guohua@163.com'};
+let ratings={};
 const cart={};
 let nextId=100;
-
-// ===== 秘密入口：连点3次 =====
+let pendingItem=null;
+ 
+let MENU=[
+  {cat:"🔥 招牌砂锅粥",items:[
+    {id:1,name:"三拼自由搭配砂锅粥",emoji:"🍲",price:19.9,orig:35.8,monthly:700,tags:"份量十足 · 35人觉得分量足",badges:["hot","rec"],toppings:[{title:"辣度选择",opts:["不辣","微辣","中辣","重辣"]},{title:"配料加选",opts:["加蟹棒","加鱼丸","加豆腐"],multi:true}]},
+    {id:2,name:"双拼自由搭配砂锅粥",emoji:"🍜",price:19.9,orig:27.8,monthly:400,tags:"实物跟商家描述一致",badges:["hot"],toppings:[{title:"辣度选择",opts:["不辣","微辣","中辣","重辣"]}]},
+    {id:3,name:"活虾砂锅粥",emoji:"🦐",price:19.9,orig:null,monthly:200,tags:"粥的口感滑嫩",badges:["new","hot"],toppings:[]},
+  ]},
+  {cat:"💕 爱心特供",items:[
+    {id:4,name:"心形煎蛋饭套餐",emoji:"🍳",price:15.9,orig:22,monthly:88,tags:"爱你每一天",badges:["new"],toppings:[{title:"蛋的熟度",opts:["全熟","半熟","溏心"]}]},
+    {id:5,name:"玫瑰花饺子（6只）",emoji:"🌹",price:22,orig:28,monthly:55,tags:"手工花形捏制",badges:["rec"],toppings:[]},
+  ]},
+  {cat:"🥗 营养蔬菜",items:[
+    {id:6,name:"清炒时令蔬菜",emoji:"🥬",price:12,orig:null,monthly:300,tags:"新鲜采购",badges:[],toppings:[]},
+    {id:7,name:"蒜蓉空心菜",emoji:"🌿",price:13,orig:null,monthly:180,tags:"大蒜提香",badges:["rec"],toppings:[]},
+  ]},
+  {cat:"🍹 饮品甜点",items:[
+    {id:8,name:"手打柠檬茶",emoji:"🍋",price:12,orig:16,monthly:220,tags:"现打现喝",badges:["hot"],toppings:[{title:"甜度",opts:["无糖","少糖","半糖","全糖"]},{title:"温度",opts:["热","常温","冰"]}]},
+    {id:9,name:"红豆汤圆",emoji:"🍡",price:8,orig:null,monthly:90,tags:"甜蜜收尾",badges:["new"],toppings:[]},
+    {id:10,name:"草莓雪花冰",emoji:"🍓",price:16,orig:20,monthly:150,tags:"季节限定",badges:["new","rec"],toppings:[]},
+  ]},
+];
+ 
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['order','review','merchant'][i]===t));
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+t).classList.add('active');
+  document.getElementById('cartBar').style.display=t==='order'?'flex':'none';
+  document.getElementById('secretBtn').style.display=t==='order'?'flex':'none';
+  if(t==='review')renderReview();
+  if(t==='merchant')renderMerchant();
+}
+ 
+function renderMerchant(){
+  document.getElementById('merchantNameBig').textContent=document.getElementById('shopNameDisplay').textContent;
+  document.getElementById('bioDisplay').textContent=SHOP_BIO;
+  let count=0; MENU.forEach(c=>c.items.forEach(()=>count++));
+  document.getElementById('merchantDishCount').textContent=count;
+  const vals=Object.values(ratings);
+  if(vals.length>0){
+    document.getElementById('merchantAvg').textContent=(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1);
+  }
+  document.getElementById('merchantInfoCard').innerHTML=MERCHANT_INFO.map(row=>`
+    <div class="merchant-info-row">
+      <span class="merchant-info-icon">${row.icon}</span>
+      <span>${row.text}</span>
+    </div>
+  `).join('');
+}
+ 
+function renderReview(){
+  const el=document.getElementById('reviewPage');
+  let allItems=[];MENU.forEach(c=>c.items.forEach(it=>allItems.push(it)));
+  el.innerHTML=`<div style="padding:12px 0 8px;font-size:13px;color:var(--muted)">为每道菜打分 ⭐</div>`+
+  allItems.map(item=>`
+    <div class="review-item">
+      <div class="review-emoji">${item.emoji}</div>
+      <div class="review-info">
+        <div class="review-name">${item.name}</div>
+        <div class="stars" id="stars-${item.id}">
+          ${[1,2,3,4,5].map(s=>`<span class="star ${(ratings[item.id]||0)>=s?'filled':''}" onclick="rate(${item.id},${s})">★</span>`).join('')}
+        </div>
+        <div class="review-count" id="rcount-${item.id}">${ratings[item.id]?`你的评分：${ratings[item.id]}星`:'还没评分'}</div>
+      </div>
+    </div>
+  `).join('');
+}
+ 
+function rate(itemId,score){
+  ratings[itemId]=score;
+  document.querySelectorAll(`#stars-${itemId} .star`).forEach((s,i)=>s.classList.toggle('filled',i<score));
+  document.getElementById('rcount-'+itemId).textContent=`你的评分：${score}星`;
+  const vals=Object.values(ratings);
+  const avg=(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1);
+  document.getElementById('reviewAvg').textContent=`★${avg}`;
+}
+ 
+// 密码
 let clickCount=0,clickTimer=null;
 document.getElementById('secretBtn').addEventListener('click',()=>{
-  clickCount++;
-  clearTimeout(clickTimer);
-  clickTimer=setTimeout(()=>clickCount=0,800);
-  if(clickCount>=3){
-    clickCount=0;
-    document.getElementById('pwInput').value='';
-    document.getElementById('pwErr').style.display='none';
-    document.getElementById('pwOverlay').classList.add('show');
-    setTimeout(()=>document.getElementById('pwInput').focus(),100);
-  }
+  clickCount++;clearTimeout(clickTimer);clickTimer=setTimeout(()=>clickCount=0,800);
+  if(clickCount>=3){clickCount=0;document.getElementById('pwInput').value='';document.getElementById('pwErr').style.display='none';document.getElementById('pwOverlay').classList.add('show');setTimeout(()=>document.getElementById('pwInput').focus(),100);}
 });
-
 function checkPw(){
-  const val=document.getElementById('pwInput').value;
-  if(val===PASSWORD){
-    document.getElementById('pwOverlay').classList.remove('show');
-    openEditor();
-  } else {
-    document.getElementById('pwErr').style.display='block';
-    document.getElementById('pwInput').value='';
-    document.getElementById('pwInput').focus();
-  }
+  if(document.getElementById('pwInput').value===PASSWORD){document.getElementById('pwOverlay').classList.remove('show');openEditor();}
+  else{document.getElementById('pwErr').style.display='block';document.getElementById('pwInput').value='';document.getElementById('pwInput').focus();}
 }
-
 function openEditor(){
   document.getElementById('customerView').style.display='none';
   document.getElementById('cartBar').style.display='none';
@@ -287,19 +415,16 @@ function openEditor(){
   document.getElementById('editorView').className='editor show';
   renderEditor();
 }
-
 function exitEditor(){
   document.getElementById('customerView').style.display='block';
   document.getElementById('cartBar').style.display='flex';
   document.getElementById('secretBtn').style.display='flex';
   document.getElementById('editorView').className='editor';
 }
-
-// ===== CUSTOMER =====
+ 
+// 点菜
 function renderSidebar(){
-  document.getElementById('sidebar').innerHTML=MENU.map((c,i)=>`
-    <div class="cat-item ${i===0?'active':''}" id="cat-${i}" onclick="scrollToSection(${i})">${c.cat}</div>
-  `).join('');
+  document.getElementById('sidebar').innerHTML=MENU.map((c,i)=>`<div class="cat-item ${i===0?'active':''}" id="cat-${i}" onclick="scrollToSection(${i})">${c.cat}</div>`).join('');
 }
 function renderMenu(){
   document.getElementById('menuList').innerHTML=MENU.map((c,ci)=>`
@@ -316,14 +441,10 @@ function renderMenu(){
               ${item.badges.includes('rec')?'<span class="badge badge-rec">👍 推荐</span>':''}
             </div>
             <div class="item-tags">月售${item.monthly}+ · ${item.tags}</div>
+            ${item.toppings&&item.toppings.length?`<div style="font-size:11px;color:var(--brand);margin-bottom:6px">可选：${item.toppings.map(g=>g.title).join('、')}</div>`:''}
             <div class="item-bottom">
-              <div>
-                <span class="item-price">¥${item.price}</span>
-                ${item.orig?`<span class="item-price-orig">¥${item.orig}</span>`:''}
-              </div>
-              <div class="cart-ctrl" id="ctrl-${item.id}">
-                <button class="btn-add" onclick="addItem(${item.id})">+</button>
-              </div>
+              <div><span class="item-price">¥${item.price}</span>${item.orig?`<span class="item-price-orig">¥${item.orig}</span>`:''}</div>
+              <div class="cart-ctrl" id="ctrl-${item.id}"><button class="btn-add" onclick="handleAdd(${item.id})">+</button></div>
             </div>
           </div>
         </div>
@@ -332,33 +453,56 @@ function renderMenu(){
   `).join('');
 }
 function getItem(id){for(const c of MENU)for(const it of c.items)if(it.id===id)return it;}
-function addItem(id){
-  const it=getItem(id);
-  if(!cart[id])cart[id]={name:it.name,price:it.price,qty:0};
-  cart[id].qty++;updateCtrl(id);updateCartBar();
+function handleAdd(id){const it=getItem(id);if(it.toppings&&it.toppings.length)openToppingSheet(it);else addItem(id,{});}
+function openToppingSheet(item){
+  pendingItem=item;
+  document.getElementById('toppingTitle').textContent=item.name;
+  document.getElementById('toppingGroups').innerHTML=item.toppings.map((g,gi)=>`
+    <div class="topping-group">
+      <div class="topping-group-title">${g.title}${g.multi?'（可多选）':'（单选）'}</div>
+      <div class="topping-options">${g.opts.map((opt,oi)=>`<button class="topping-opt" id="topt-${gi}-${oi}" onclick="selectTopping(${gi},${oi},${!!g.multi})">${opt}</button>`).join('')}</div>
+    </div>
+  `).join('');
+  item.toppings.forEach((g,gi)=>{if(!g.multi)selectTopping(gi,0,false);});
+  document.getElementById('toppingOverlay').classList.add('show');
+}
+function selectTopping(gi,oi,multi){
+  if(!multi){pendingItem.toppings[gi].opts.forEach((_,i)=>{const el=document.getElementById('topt-'+gi+'-'+i);if(el)el.classList.remove('selected');});}
+  const el=document.getElementById('topt-'+gi+'-'+oi);
+  if(el){if(multi)el.classList.toggle('selected');else el.classList.add('selected');}
+}
+function confirmTopping(){
+  const item=pendingItem;
+  const chosen={};
+  item.toppings.forEach((g,gi)=>{
+    const sel=[];g.opts.forEach((_,oi)=>{const el=document.getElementById('topt-'+gi+'-'+oi);if(el&&el.classList.contains('selected'))sel.push(g.opts[oi]);});
+    if(sel.length)chosen[g.title]=sel.join('、');
+  });
+  document.getElementById('toppingOverlay').classList.remove('show');
+  addItem(item.id,chosen);
+}
+function addItem(id,chosen){
+  const it=getItem(id);const key=id+'_'+JSON.stringify(chosen);
+  if(!cart[key])cart[key]={id,name:it.name,price:it.price,qty:0,chosen};
+  cart[key].qty++;updateCtrlForItem(id);updateCartBar();
 }
 function removeItem(id){
-  if(!cart[id])return;
-  cart[id].qty--;
-  if(cart[id].qty<=0)delete cart[id];
-  updateCtrl(id);updateCartBar();
+  const keys=Object.keys(cart).filter(k=>cart[k].id===id&&cart[k].qty>0);
+  if(!keys.length)return;const key=keys[keys.length-1];
+  cart[key].qty--;if(cart[key].qty<=0)delete cart[key];
+  updateCtrlForItem(id);updateCartBar();
 }
-function updateCtrl(id){
-  const qty=cart[id]?.qty||0;
-  const el=document.getElementById('ctrl-'+id);
-  if(!el)return;
-  el.innerHTML=qty===0
-    ?`<button class="btn-add" onclick="addItem(${id})">+</button>`
-    :`<button class="btn-minus" onclick="removeItem(${id})">−</button><span class="cart-qty">${qty}</span><button class="btn-add" onclick="addItem(${id})">+</button>`;
+function updateCtrlForItem(id){
+  const total=Object.values(cart).filter(i=>i.id===id).reduce((s,i)=>s+i.qty,0);
+  const el=document.getElementById('ctrl-'+id);if(!el)return;
+  el.innerHTML=total===0?`<button class="btn-add" onclick="handleAdd(${id})">+</button>`:`<button class="btn-minus" onclick="removeItem(${id})">−</button><span class="cart-qty">${total}</span><button class="btn-add" onclick="handleAdd(${id})">+</button>`;
 }
 function updateCartBar(){
   const items=Object.values(cart).filter(i=>i.qty>0);
-  const total=items.reduce((s,i)=>s+i.price*i.qty,0);
-  const count=items.reduce((s,i)=>s+i.qty,0);
+  const total=items.reduce((s,i)=>s+i.price*i.qty,0);const count=items.reduce((s,i)=>s+i.qty,0);
   document.getElementById('cartAmount').textContent='¥'+total.toFixed(1);
   document.getElementById('cartSub').textContent=count>0?`已选 ${count} 件`:'还没选菜哦～';
-  const cc=document.getElementById('cartCount');
-  cc.style.display=count>0?'flex':'none';cc.textContent=count;
+  const cc=document.getElementById('cartCount');cc.style.display=count>0?'flex':'none';cc.textContent=count;
   document.getElementById('submitBtn').className='submit-btn'+(count>0?'':' disabled');
 }
 function scrollToSection(i){
@@ -366,12 +510,12 @@ function scrollToSection(i){
   document.querySelectorAll('.cat-item').forEach((el,j)=>el.classList.toggle('active',j===i));
 }
 function openSheet(){
-  const items=Object.values(cart).filter(i=>i.qty>0);
-  if(!items.length)return;
+  const items=Object.values(cart).filter(i=>i.qty>0);if(!items.length)return;
   const total=items.reduce((s,i)=>s+i.price*i.qty,0);
-  document.getElementById('orderListDetail').innerHTML=items.map(i=>`
-    <div class="order-row"><span>${i.name} x${i.qty}</span><span>¥${(i.price*i.qty).toFixed(1)}</span></div>
-  `).join('');
+  document.getElementById('orderListDetail').innerHTML=items.map(i=>{
+    const cs=i.chosen&&Object.keys(i.chosen).length?Object.entries(i.chosen).map(([k,v])=>`${k}：${v}`).join(' / '):'';
+    return `<div class="order-row"><span>${i.name} x${i.qty}</span><span>¥${(i.price*i.qty).toFixed(1)}</span></div>${cs?`<div class="order-row-sub">${cs}</div>`:''}`;
+  }).join('');
   document.getElementById('sheetTotal').textContent='¥'+total.toFixed(1);
   document.getElementById('orderSheet').classList.add('show');
 }
@@ -379,37 +523,46 @@ function submitOrder(){
   const items=Object.values(cart).filter(i=>i.qty>0);
   const note=document.getElementById('noteInput').value;
   const total=items.reduce((s,i)=>s+i.price*i.qty,0);
-  const orderText=items.map(i=>`${i.name} x${i.qty}  ¥${(i.price*i.qty).toFixed(1)}`).join('\n');
+  const orderText=items.map(i=>{const cs=i.chosen&&Object.keys(i.chosen).length?' ('+Object.entries(i.chosen).map(([k,v])=>`${k}:${v}`).join(', ')+')':'';return `${i.name}${cs} x${i.qty}  ¥${(i.price*i.qty).toFixed(1)}`;}).join('\n');
   document.getElementById('orderSheet').classList.remove('show');
   if(CONFIG.serviceId&&CONFIG.templateId&&CONFIG.publicKey&&CONFIG.email){
     emailjs.init(CONFIG.publicKey);
-    emailjs.send(CONFIG.serviceId,CONFIG.templateId,{
-      to_email:CONFIG.email,order_content:orderText,
-      note:note||'无备注',total:'¥'+total.toFixed(1)
-    }).then(()=>showToast('📧 通知已发送！')).catch(()=>showToast('发送失败，检查EmailJS配置'));
+    emailjs.send(CONFIG.serviceId,CONFIG.templateId,{to_email:CONFIG.email,order_content:orderText,note:note||'无备注',total:'¥'+total.toFixed(1)})
+    .then(()=>showToast('📧 通知已发送！')).catch(()=>showToast('发送失败，检查EmailJS配置'));
   }
   document.getElementById('successMsg').innerHTML=`大厨已收到通知<br>${note?'备注：'+note:'马上开做！'}`;
   document.getElementById('successOverlay').classList.add('show');
 }
 function closeSuccess(){
   document.getElementById('successOverlay').classList.remove('show');
-  Object.keys(cart).forEach(k=>delete cart[k]);
-  updateCartBar();
-  MENU.forEach(c=>c.items.forEach(it=>updateCtrl(it.id)));
+  Object.keys(cart).forEach(k=>delete cart[k]);updateCartBar();
+  MENU.forEach(c=>c.items.forEach(it=>updateCtrlForItem(it.id)));
   document.getElementById('noteInput').value='';
 }
-
-// ===== EDITOR =====
+ 
+// 编辑器
 function renderEditor(){
-  document.getElementById('edShopName').value=CONFIG.shopName;
-  document.getElementById('edShopTag').value=CONFIG.shopTag;
+  document.getElementById('edShopName').value=document.getElementById('shopNameDisplay').textContent;
+  document.getElementById('edShopTag').value=document.getElementById('shopTagDisplay').textContent;
   document.getElementById('edServiceId').value=CONFIG.serviceId;
   document.getElementById('edTemplateId').value=CONFIG.templateId;
   document.getElementById('edPublicKey').value=CONFIG.publicKey;
   document.getElementById('edEmail').value=CONFIG.email;
   document.getElementById('edPassword').value='';
+  document.getElementById('edBio').value=SHOP_BIO;
+  renderMerchantInfoEditor();
   renderCatList();
 }
+ 
+function renderMerchantInfoEditor(){
+  document.getElementById('merchantInfoEditor').innerHTML=MERCHANT_INFO.map((row,i)=>`
+    <div class="info-row-ed">
+      <input class="emoji-inp" value="${row.icon}" id="micon-${i}" placeholder="📍">
+      <input style="flex:1;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;font-family:inherit;" value="${row.text}" id="mtext-${i}" placeholder="信息内容">
+    </div>
+  `).join('');
+}
+ 
 function renderCatList(){
   document.getElementById('catList').innerHTML=MENU.map((cat,ci)=>`
     <div class="cat-block">
@@ -417,28 +570,60 @@ function renderCatList(){
         <input class="ed-input" style="flex:1" value="${cat.cat}" id="catName-${ci}" placeholder="分类名">
         <button class="ed-btn ed-btn-del" onclick="delCat(${ci})">删除</button>
       </div>
-      ${cat.items.map((it,ii)=>`
-        <div class="dish-row">
-          <input style="width:32px;text-align:center;padding:6px 4px" value="${it.emoji}" id="emoji-${ci}-${ii}" placeholder="🍜">
-          <input style="flex:2;min-width:80px" value="${it.name}" id="dname-${ci}-${ii}" placeholder="菜品名">
-          <input style="width:60px" value="${it.price}" id="dprice-${ci}-${ii}" type="number" placeholder="价格">
-          <button class="ed-btn ed-btn-del" style="padding:6px 8px;font-size:12px" onclick="delDish(${ci},${ii})">✕</button>
-        </div>
-      `).join('')}
+      ${cat.items.map((it,ii)=>renderDishCard(ci,ii,it)).join('')}
       <button class="ed-btn ed-btn-add" style="margin-top:6px;font-size:12px;padding:5px 10px" onclick="addDish(${ci})">+ 加菜</button>
     </div>
   `).join('');
 }
+ 
+function renderDishCard(ci,ii,it){
+  const toppingHTML=(it.toppings||[]).map((g,gi)=>`
+    <div class="topping-group-ed">
+      <input value="${g.title}" placeholder="配料组名" id="tgname-${ci}-${ii}-${gi}" oninput="MENU[${ci}].items[${ii}].toppings[${gi}].title=this.value">
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">
+        <span style="font-size:11px;color:var(--muted)">允许多选？</span>
+        <input type="checkbox" ${g.multi?'checked':''} onchange="MENU[${ci}].items[${ii}].toppings[${gi}].multi=this.checked">
+      </div>
+      <div class="topping-opts-ed">${(g.opts||[]).map((opt,oi)=>`<span class="topping-opt-tag">${opt}<button onclick="delOpt(${ci},${ii},${gi},${oi})">×</button></span>`).join('')}</div>
+      <div class="add-opt-row">
+        <input id="newopt-${ci}-${ii}-${gi}" placeholder="新增选项，回车确认" onkeydown="if(event.key==='Enter')addOpt(${ci},${ii},${gi})">
+        <button onclick="addOpt(${ci},${ii},${gi})">+</button>
+      </div>
+      <button onclick="delToppingGroup(${ci},${ii},${gi})" style="margin-top:6px;background:none;border:none;color:#e74c3c;font-size:12px;cursor:pointer;font-family:inherit">删除此配料组</button>
+    </div>
+  `).join('');
+  return `
+    <div class="dish-card">
+      <div class="dish-main">
+        <input style="width:32px;text-align:center;padding:6px 4px" value="${it.emoji}" id="emoji-${ci}-${ii}">
+        <input style="flex:2;min-width:80px" value="${it.name}" id="dname-${ci}-${ii}">
+        <input style="width:60px" value="${it.price}" id="dprice-${ci}-${ii}" type="number">
+        <button class="ed-btn ed-btn-del" style="padding:6px 8px;font-size:12px" onclick="delDish(${ci},${ii})">✕</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">配料选项：</div>
+      <div id="tgroups-${ci}-${ii}">${toppingHTML}</div>
+      <button class="ed-btn ed-btn-add" style="font-size:11px;padding:4px 10px;margin-top:4px" onclick="addToppingGroup(${ci},${ii})">+ 新增配料组</button>
+    </div>`;
+}
+ 
+function addToppingGroup(ci,ii){if(!MENU[ci].items[ii].toppings)MENU[ci].items[ii].toppings=[];MENU[ci].items[ii].toppings.push({title:'新配料组',opts:[],multi:false});renderCatList();}
+function delToppingGroup(ci,ii,gi){MENU[ci].items[ii].toppings.splice(gi,1);renderCatList();}
+function addOpt(ci,ii,gi){const inp=document.getElementById(`newopt-${ci}-${ii}-${gi}`);const val=inp.value.trim();if(!val)return;MENU[ci].items[ii].toppings[gi].opts.push(val);inp.value='';renderCatList();}
+function delOpt(ci,ii,gi,oi){MENU[ci].items[ii].toppings[gi].opts.splice(oi,1);renderCatList();}
 function addCat(){MENU.push({cat:'新分类',items:[]});renderCatList();}
 function delCat(ci){if(MENU.length<=1){showToast('至少保留一个分类');return;}MENU.splice(ci,1);renderCatList();}
-function addDish(ci){MENU[ci].items.push({id:nextId++,name:'新菜品',emoji:'🍽️',price:18,orig:null,monthly:0,tags:'',badges:[]});renderCatList();}
+function addDish(ci){MENU[ci].items.push({id:nextId++,name:'新菜品',emoji:'🍽️',price:18,orig:null,monthly:0,tags:'',badges:[],toppings:[]});renderCatList();}
 function delDish(ci,ii){MENU[ci].items.splice(ii,1);renderCatList();}
-
+ 
 function saveAll(){
-  const newPw=document.getElementById('edPassword').value.trim();
-  if(newPw) PASSWORD=newPw;
-  CONFIG.shopName=document.getElementById('edShopName').value||CONFIG.shopName;
-  CONFIG.shopTag=document.getElementById('edShopTag').value;
+  const newPw=document.getElementById('edPassword').value.trim();if(newPw)PASSWORD=newPw;
+  const shopName=document.getElementById('edShopName').value||'🐾 小狗必吃榜';
+  const shopTag=document.getElementById('edShopTag').value;
+  SHOP_BIO=document.getElementById('edBio').value||SHOP_BIO;
+  MERCHANT_INFO.forEach((row,i)=>{
+    const icon=document.getElementById('micon-'+i)?.value;const text=document.getElementById('mtext-'+i)?.value;
+    if(icon)row.icon=icon;if(text)row.text=text;
+  });
   CONFIG.serviceId=document.getElementById('edServiceId').value.trim();
   CONFIG.templateId=document.getElementById('edTemplateId').value.trim();
   CONFIG.publicKey=document.getElementById('edPublicKey').value.trim();
@@ -451,20 +636,15 @@ function saveAll(){
       it.price=parseFloat(document.getElementById('dprice-'+ci+'-'+ii)?.value)||it.price;
     });
   });
-  document.getElementById('shopNameDisplay').textContent=CONFIG.shopName;
-  document.getElementById('shopTagDisplay').textContent=CONFIG.shopTag;
+  document.getElementById('shopNameDisplay').textContent=shopName;
+  document.getElementById('shopTagDisplay').textContent=shopTag;
   renderSidebar();renderMenu();
   Object.keys(cart).forEach(k=>delete cart[k]);updateCartBar();
-  showToast('✅ 保存成功！');
-  setTimeout(()=>exitEditor(),800);
+  showToast('✅ 保存成功！');setTimeout(()=>exitEditor(),800);
 }
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.style.display='block';
-  setTimeout(()=>t.style.display='none',2500);
-}
-
+ 
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
+ 
 renderSidebar();renderMenu();
 </script>
 </body>
