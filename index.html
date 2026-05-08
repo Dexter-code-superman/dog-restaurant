@@ -167,7 +167,7 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
     <div class="header-top">
       <div style="display:flex;align-items:center">
         <span class="shop-name" id="shopNameDisplay">🐾 小狗必吃榜</span>
-        <span class="shop-tag" id="shopTagDisplay">私厨定制</span>
+        <span class="shop-tag" id="shopTagDisplay">Dog restaurant</span>
       </div>
       <span style="font-size:22px">🫶</span>
     </div>
@@ -272,7 +272,7 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
   <div class="ed-section">
     <div class="ed-title">🏪 基本设置</div>
     <div class="ed-row"><span class="ed-label">店铺名</span><input class="ed-input" id="edShopName" value="🐾 小狗必吃榜"></div>
-    <div class="ed-row"><span class="ed-label">副标签</span><input class="ed-input" id="edShopTag" value="私厨定制"></div>
+    <div class="ed-row"><span class="ed-label">副标签</span><input class="ed-input" id="edShopTag" value="Dog restaurant"></div>
     <div class="ed-row"><span class="ed-label">编辑密码</span><input class="ed-input" id="edPassword" type="password" placeholder="留空则不修改"></div>
   </div>
  
@@ -311,38 +311,20 @@ body,html{font-family:'PingFang SC','Noto Sans SC',system-ui,sans-serif;backgrou
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 let PASSWORD='1234';
-let SHOP_BIO='这里是专属于你的小厨房，每一道菜都是用心为你准备的 💝';
+let SHOP_BIO='宝宝泥嚎，这里是Dog restaurant。可是小狗脏兮兮，根本没有明厨亮灶，哈哈哈哈哈';
 let MERCHANT_INFO=[
-  {icon:'📍',text:'专属私厨，送达到家'},
-  {icon:'⏰',text:'营业时间：随时为你开火'},
-  {icon:'🐾',text:'Dog Restaurant · 只为你一人服务'},
+  {icon:'📍',text:'专属私厨，家中制作'},
+  {icon:'⏰',text:'营业时间：随时为宝宝开火'},
+  {icon:'🐾',text:'Dog Restaurant · 只为宝宝一人服务'},
 ];
 let CONFIG={serviceId:'service_co65wh5',templateId:'template_aurbnvc',publicKey:'Ky0W9ki3RmCF-N32L',email:'yuan_guohua@163.com'};
+ 
 let ratings={};
 const cart={};
 let nextId=100;
 let pendingItem=null;
  
-let MENU=[
-  {cat:"🔥 招牌砂锅粥",items:[
-    {id:1,name:"三拼自由搭配砂锅粥",emoji:"🍲",price:19.9,orig:35.8,monthly:700,tags:"份量十足 · 35人觉得分量足",badges:["hot","rec"],toppings:[{title:"辣度选择",opts:["不辣","微辣","中辣","重辣"]},{title:"配料加选",opts:["加蟹棒","加鱼丸","加豆腐"],multi:true}]},
-    {id:2,name:"双拼自由搭配砂锅粥",emoji:"🍜",price:19.9,orig:27.8,monthly:400,tags:"实物跟商家描述一致",badges:["hot"],toppings:[{title:"辣度选择",opts:["不辣","微辣","中辣","重辣"]}]},
-    {id:3,name:"活虾砂锅粥",emoji:"🦐",price:19.9,orig:null,monthly:200,tags:"粥的口感滑嫩",badges:["new","hot"],toppings:[]},
-  ]},
-  {cat:"💕 爱心特供",items:[
-    {id:4,name:"心形煎蛋饭套餐",emoji:"🍳",price:15.9,orig:22,monthly:88,tags:"爱你每一天",badges:["new"],toppings:[{title:"蛋的熟度",opts:["全熟","半熟","溏心"]}]},
-    {id:5,name:"玫瑰花饺子（6只）",emoji:"🌹",price:22,orig:28,monthly:55,tags:"手工花形捏制",badges:["rec"],toppings:[]},
-  ]},
-  {cat:"🥗 营养蔬菜",items:[
-    {id:6,name:"清炒时令蔬菜",emoji:"🥬",price:12,orig:null,monthly:300,tags:"新鲜采购",badges:[],toppings:[]},
-    {id:7,name:"蒜蓉空心菜",emoji:"🌿",price:13,orig:null,monthly:180,tags:"大蒜提香",badges:["rec"],toppings:[]},
-  ]},
-  {cat:"🍹 饮品甜点",items:[
-    {id:8,name:"手打柠檬茶",emoji:"🍋",price:12,orig:16,monthly:220,tags:"现打现喝",badges:["hot"],toppings:[{title:"甜度",opts:["无糖","少糖","半糖","全糖"]},{title:"温度",opts:["热","常温","冰"]}]},
-    {id:9,name:"红豆汤圆",emoji:"🍡",price:8,orig:null,monthly:90,tags:"甜蜜收尾",badges:["new"],toppings:[]},
-    {id:10,name:"草莓雪花冰",emoji:"🍓",price:16,orig:20,monthly:150,tags:"季节限定",badges:["new","rec"],toppings:[]},
-  ]},
-];
+let MENU=[{"cat":"🔥 来点家常饭菜","items":[{"id":1,"name":"地三鲜","emoji":"🍲","price":19.9,"orig":35.8,"monthly":700,"tags":"份量十足 · 35人觉得分量足","badges":["hot","rec"],"toppings":[]},{"id":2,"name":"炒牛肉","emoji":"🥩","price":19.9,"orig":27.8,"monthly":400,"tags":"实物跟商家描述一致","badges":["hot"],"toppings":[{"title":"辣度选择","opts":["不辣","微辣","中辣","重辣"]},{"title":"风味","opts":["孜然圆葱","香菜牛肉","小炒黄牛肉"],"multi":false}]},{"id":100,"name":"圆葱炒鸡","emoji":"🍗","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":101,"name":"酸菜炒五花肉","emoji":"🥩","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":102,"name":"豆豉鲮鱼油麦菜","emoji":"🐠","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":103,"name":"番茄炒蛋","emoji":"🍅","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":104,"name":"虾仁鸡蛋炒时蔬","emoji":"🦐","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":105,"name":"煎豆腐","emoji":"🍳","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":126,"name":"农家一碗香","emoji":"🥣","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]}]},{"cat":"🔥  热热乎乎，不要凉风梢气","items":[{"id":4,"name":"红烧肉","emoji":"🥩","price":15.9,"orig":22,"monthly":88,"tags":"爱你每一天","badges":["new"],"toppings":[{"title":"可选肉类","opts":["牛肉","羊肉","猪肉","小狗肉"],"multi":false},{"title":"配菜","opts":["豆芽","土豆","其他"],"multi":false}]},{"id":106,"name":"清炖羊肉","emoji":"🐑","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":107,"name":"炖牛肉","emoji":"🐮","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[{"title":"风味","opts":["土豆炖牛肉","西红柿炖牛肉","西红柿土豆炖牛肉"],"multi":false}]},{"id":108,"name":"酸菜炖排骨","emoji":"🥗","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":109,"name":"红烧三文鱼头","emoji":"🍣","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":110,"name":"椰子鸡","emoji":"🐔","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":111,"name":"延边啤酒锅","emoji":"🍺","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[{"title":"配菜","opts":["鸡蛋","羊肉卷","牛肉卷","午餐肉","喜欢吃的小海鲜"],"multi":false}]},{"id":112,"name":"雪里蕻滚豆腐","emoji":"🍽️","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":128,"name":"烤鱼","emoji":"🐟","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[{"title":"配菜","opts":["豆腐","豆皮","豆芽","午餐肉","预制丸子","其他"],"multi":false}]}]},{"cat":"🔥  多国料理","items":[{"id":6,"name":"小狗牛排","emoji":"🥩","price":12,"orig":null,"monthly":300,"tags":"新鲜采购","badges":[],"toppings":[]},{"id":7,"name":"小狗汉堡","emoji":"🍔","price":13,"orig":null,"monthly":180,"tags":"大蒜提香","badges":["rec"],"toppings":[{"title":"内容","opts":["自在极意","就这么简单！"],"multi":true}]}]},{"cat":"🔥 风味小吃","items":[{"id":9,"name":"凉拌牛肉","emoji":"🥩","price":8,"orig":null,"monthly":90,"tags":"甜蜜收尾","badges":["new"],"toppings":[]},{"id":129,"name":"烤鸡翅","emoji":"🍗","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[{"title":"风味","opts":["照烧","奥尔良","还有什么风味一起探索吧"],"multi":false}]},{"id":130,"name":"一起去搞点预制小吃去！","emoji":"🍬","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]}]},{"cat":"🔥 特色主食","items":[{"id":113,"name":"小狗炒饭","emoji":"🍳","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[{"title":"配菜","opts":["自在极意","就这么简单！"],"multi":true}]},{"id":114,"name":"小狗炒粉","emoji":"🍜","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":115,"name":"小狗炒面","emoji":"🍜","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":116,"name":"特色汤面","emoji":"🍜","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[{"title":"风味","opts":["肉片面","蔬菜面","阳春面"],"multi":false}]},{"id":117,"name":"烤肉拌饭","emoji":"🍖","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":118,"name":"小狗手抓饭","emoji":"🥕","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[{"title":"配料","opts":["羊肉","牛肉","鸡肉","没有素的，抓饭谁吃素的"],"multi":false}]},{"id":119,"name":"打抛饭","emoji":"🍳","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":120,"name":"好吃拌面","emoji":"🍜","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":121,"name":"炝锅面","emoji":"🍅","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]}]},{"cat":"🔥 好吃的小动物","items":[{"id":122,"name":"十一猫","emoji":"🐈‍⬛","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":123,"name":"大闸蟹","emoji":"🐢","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":124,"name":"KFC","emoji":"🐢","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]},{"id":125,"name":"小狗家四只小龟拼盘","emoji":"🐢","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]}]},{"cat":"不做了，出去吃！","items":[{"id":127,"name":"一起出去吃饭吧，要记住这些时刻哇！","emoji":"🧑‍🤝‍🧑","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]}]},{"cat":"不做了，点外卖","items":[{"id":131,"name":"点外卖也要吃点健康的，陪伴彼此更长久哦","emoji":"🧑‍🤝‍🧑","price":18,"orig":null,"monthly":0,"tags":"","badges":[],"toppings":[]}]}];
  
 function switchTab(t){
   document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',['order','review','merchant'][i]===t));
@@ -638,14 +620,37 @@ function saveAll(){
   });
   document.getElementById('shopNameDisplay').textContent=shopName;
   document.getElementById('shopTagDisplay').textContent=shopTag;
+  // 保存到 localStorage
+  localStorage.setItem('dogRestaurant',JSON.stringify({
+    shopName,shopTag,SHOP_BIO,MERCHANT_INFO,CONFIG,MENU,PASSWORD
+  }));
   renderSidebar();renderMenu();
   Object.keys(cart).forEach(k=>delete cart[k]);updateCartBar();
-  showToast('✅ 保存成功！');setTimeout(()=>exitEditor(),800);
+  showToast('✅ 保存成功！已永久记住');setTimeout(()=>exitEditor(),800);
+}
+ 
+function loadFromStorage(){
+  try{
+    const raw=localStorage.getItem('dogRestaurant');
+    if(!raw)return;
+    const d=JSON.parse(raw);
+    if(d.shopName)document.getElementById('shopNameDisplay').textContent=d.shopName;
+    if(d.shopTag)document.getElementById('shopTagDisplay').textContent=d.shopTag;
+    if(d.SHOP_BIO)SHOP_BIO=d.SHOP_BIO;
+    if(d.MERCHANT_INFO)MERCHANT_INFO=d.MERCHANT_INFO;
+    if(d.CONFIG)Object.assign(CONFIG,d.CONFIG);
+    if(d.MENU)MENU=d.MENU;
+    if(d.PASSWORD)PASSWORD=d.PASSWORD;
+  }catch(e){}
 }
  
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
  
+loadFromStorage();
 renderSidebar();renderMenu();
 </script>
 </body>
 </html>
+ 
+
+
